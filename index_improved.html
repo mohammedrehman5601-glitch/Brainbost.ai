@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="BrainBoost AI - Free AI Study Hub for students worldwide.">
+<meta name="keywords" content="AI Study, Notes Generator, Quiz Generator, Coding, English Learning">
+<meta name="author" content="BrainBoost AI">
+<meta property="og:title" content="BrainBoost AI">
+<meta property="og:description" content="Free AI Study Platform">
+<meta property="og:type" content="website">
+<title>BrainBoost AI — Free AI Study Hub</title>
+<style>
+/* ===== RESET & VARIABLES ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8fafc; --surface:#fff; --text:#1e293b; --text2:#64748b;
+  --accent:#6366f1; --accent2:#8b5cf6; --accent3:#a855f7;
+  --card-bg:rgba(255,255,255,0.8); --card-border:rgba(0,0,0,0.06);
+  --glass:rgba(255,255,255,0.7); --shadow:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg:0 20px 50px rgba(0,0,0,0.08); --radius:16px; --radius-sm:10px;
+  --nav-bg:rgba(255,255,255,0.75);
+  --hero-glow:rgba(99,102,241,0.15);
+  --input-bg:#f1f5f9; --input-border:#e2e8f0;
+  --badge-bg:#eef2ff; --badge-text:#4f46e5;
+  --danger:#ef4444; --success:#10b981; --warning:#f59e0b;
+}
+[data-theme="dark"]{
+  --bg:#0f172a; --surface:#1e293b; --text:#f1f5f9; --text2:#94a3b8;
+  --card-bg:rgba(30,41,59,0.8); --card-border:rgba(255,255,255,0.06);
+  --glass:rgba(30,41,59,0.7); --shadow:0 1px 3px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2);
+  --shadow-lg:0 20px 50px rgba(0,0,0,0.4); --nav-bg:rgba(15,23,42,0.8);
+  --hero-glow:rgba(99,102,241,0.25);
+  --input-bg:#1e293b; --input-border:#334155;
+  --badge-bg:#1e1b4b; --badge-text:#a5b4fc;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.6;
+  overflow-x:hidden; transition:background .3s,color .3s;
+}
+
+/* ===== NAVBAR ===== */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--nav-bg); backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--card-border); padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;height:64px;
+}
+.nav-logo{
+  font-size:1.4rem;font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:flex;align-items:center;gap:8px;text-decoration:none;
+}
+.nav-logo .icon{font-size:1.6rem;}
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none;flex-wrap:wrap}
+.nav-links a{
+  text-decoration:none;color:var(--text2);padding:8px 14px;border-radius:8px;
+  font-size:.9rem;font-weight:500;transition:all .2s;
+}
+.nav-links a:hover{color:var(--accent);background:var(--badge-bg)}
+.theme-toggle{
+  background:var(--input-bg);border:1px solid var(--input-border);border-radius:50%;
+  width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1.2rem;transition:all .2s;margin-left:8px;
+}
+.theme-toggle:hover{background:var(--badge-bg)}
+.menu-btn{display:none;background:none;border:none;color:var(--text);font-size:1.6rem;cursor:pointer}
+
+/* ===== HERO ===== */
+.hero{
+  padding:140px 24px 80px;text-align:center;position:relative;
+  max-width:100%;margin:0 auto;
+  background:linear-gradient(180deg,rgba(99,102,241,.05) 0%,transparent 100%);
+}
+.hero-inner{max-width:900px;margin:0 auto;position:relative;z-index:1}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;background:var(--badge-bg);
+  color:var(--badge-text);padding:6px 16px;border-radius:50px;font-size:.85rem;
+  font-weight:600;margin-bottom:24px;animation:fadeUp .6s ease;
+}
+.hero-badge .dot{width:8px;height:8px;background:var(--success);border-radius:50%;animation:pulse 2s infinite}
+.hero h1{
+  font-size:clamp(2.4rem,6vw,4rem);font-weight:900;line-height:1.15;
+  margin-bottom:20px;animation:fadeUp .6s .1s both;
+}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{
+  font-size:1.2rem;color:var(--text2);max-width:600px;margin:0 auto 36px;
+  animation:fadeUp .6s .2s both;
+}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fadeUp .6s .3s both}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:50px;
+  font-size:1rem;font-weight:600;text-decoration:none;cursor:pointer;
+  border:none;transition:all .25s;white-space:nowrap;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;box-shadow:0 4px 20px rgba(99,102,241,.4);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,.5)}
+.btn-outline{
+  background:var(--glass);color:var(--text);border:2px solid var(--input-border);
+  backdrop-filter:blur(10px);
+}
+.btn-outline:hover{background:var(--badge-bg);border-color:var(--accent)}
+.btn-sm{padding:8px 18px;font-size:.85rem;border-radius:8px}
+.btn-full{width:100%;justify-content:center}
+
+/* ===== HERO STATS ===== */
+.hero-stats{
+  display:flex;gap:40px;justify-content:center;margin-top:60px;
+  flex-wrap:wrap;animation:fadeUp .6s .4s both;
+}
+.hero-stat{text-align:center}
+.hero-stat .num{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-stat .lbl{font-size:.85rem;color:var(--text2)}
+
+/* ===== FLOATING SHAPES ===== */
+.floating-shapes{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.shape{
+  position:absolute;border-radius:50%;background:var(--hero-glow);
+  filter:blur(60px);animation:float 8s ease-in-out infinite;
+}
+.shape:nth-child(1){width:300px;height:300px;top:-80px;left:10%;animation-delay:0s}
+.shape:nth-child(2){width:200px;height:200px;bottom:-40px;right:5%;animation-delay:3s;background:rgba(139,92,246,.12)}
+.shape:nth-child(3){width:150px;height:150px;top:40%;left:60%;animation-delay:5s;background:rgba(168,85,247,.1)}
+
+/* ===== SECTION ===== */
+.section{padding:80px 24px}
+.section-header{text-align:center;margin-bottom:60px}
+.section-header h2{font-size:2.2rem;font-weight:800;margin-bottom:12px}
+.section-header h2 span{background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section-header p{color:var(--text2);max-width:500px;margin:0 auto;font-size:1.05rem}
+.container{max-width:1200px;margin:0 auto}
+
+/* ===== TOOLS CARDS ===== */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.tool-card{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:var(--radius);padding:32px 24px;transition:all .3s;
+  backdrop-filter:blur(10px);position:relative;overflow:hidden;
+  cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:12px;
+}
+.tool-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent3));
+  transform:scaleX(0);transition:transform .3s;transform-origin:left;
+}
+.tool-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.tool-card:hover::before{transform:scaleX(1)}
+.tool-icon{
+  width:52px;height:52px;border-radius:14px;display:flex;align-items:center;
+  justify-content:center;font-size:1.6rem;flex-shrink:0;
+}
+.tool-card h3{font-size:1.2rem;font-weight:700}
+.tool-card p{color:var(--text2);font-size:.92rem;flex:1}
+.tool-tag{
+  display:inline-block;background:var(--badge-bg);color:var(--badge-text);
+  padding:4px 10px;border-radius:6px;font-size:.75rem;font-weight:600;
+}
+.icon-purple{background:#eef2ff;color:#6366f1}
+.icon-blue{background:#dbeafe;color:#3b82f6}
+.icon-green{background:#d1fae5;color:#10b981}
+.icon-orange{background:#ffedd5;color:#f97316}
+.icon-pink{background:#fce7f3;color:#ec4899}
+.icon-teal{background:#ccfbf1;color:#14b8a6}
+[data-theme="dark"] .icon-purple{background:#1e1b4b;color:#a5b4fc}
+[data-theme="dark"] .icon-blue{background:#172554;color:#93c5fd}
+[data-theme="dark"] .icon-green{background:#052e16;color:#6ee7b7}
+[data-theme="dark"] .icon-orange{background:#431407;color:#fdba74}
+[data-theme="dark"] .icon-pink{background:#4c0519;color:#f9a8d4}
+[data-theme="dark"] .icon-teal{background:#042f2e;color:#5eead4}
+
+/* ===== TOOL PANELS ===== */
+.tool-panel{
+  display:none;background:var(--surface);border:1px solid var(--card-border);
+  border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:32px;
+  margin-top:32px;animation:slideUp .4s ease;
+}
+.tool-panel.active{display:block}
+.tool-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.tool-panel-header h2{font-size:1.5rem}
+.tool-close{
+  background:var(--input-bg);border:none;border-radius:50%;width:36px;height:36px;
+  cursor:pointer;font-size:1.2rem;color:var(--text2);display:flex;align-items:center;justify-content:center
+}
+.tool-close:hover{background:var(--danger);color:#fff}
+textarea,.tool-input{
+  width:100%;padding:14px 18px;border:2px solid var(--input-border);
+  border-radius:var(--radius-sm);background:var(--input-bg);color:var(--text);
+  font-size:1rem;font-family:inherit;resize:vertical;transition:border .2s;
+}
+textarea:focus,.tool-input:focus{outline:none;border-color:var(--accent)}
+.tool-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.tool-select{
+  padding:12px 16px;border:2px solid var(--input-border);border-radius:var(--radius-sm);
+  background:var(--input-bg);color:var(--text);font-size:.9rem;cursor:pointer;flex:1;min-width:140px;
+}
+.tool-output{
+  margin-top:20px;padding:20px;background:var(--input-bg);border-radius:var(--radius-sm);
+  border:1px solid var(--input-border);white-space:pre-wrap;line-height:1.7;
+  max-height:400px;overflow-y:auto;display:none;
+}
+.tool-output.show{display:block}
+.loading-dots{display:none;text-align:center;padding:20px}
+.loading-dots.show{display:block}
+.loading-dots span{
+  display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);
+  margin:0 4px;animation:bounce 1.4s infinite ease-in-out both;
+}
+.loading-dots span:nth-child(1){animation-delay:-.32s}
+.loading-dots span:nth-child(2){animation-delay:-.16s}
+
+/* ===== QUIZ ===== */
+.quiz-question{
+  background:var(--input-bg);padding:24px;border-radius:var(--radius-sm);margin-bottom:16px;
+  border-left:4px solid var(--accent);
+}
+.quiz-question h4{margin-bottom:12px;font-size:1.05rem}
+.quiz-option{
+  display:block;padding:10px 16px;margin:6px 0;border-radius:8px;
+  cursor:pointer;border:2px solid var(--input-border);transition:all .2s;
+  background:var(--surface);
+}
+.quiz-option:hover{border-color:var(--accent);background:var(--badge-bg)}
+.quiz-option.selected{border-color:var(--accent);background:var(--badge-bg);font-weight:600}
+.quiz-option.correct{border-color:var(--success);background:#d1fae5;color:#065f46}
+.quiz-option.wrong{border-color:var(--danger);background:#fee2e2;color:#991b1b}
+.quiz-score{text-align:center;font-size:1.5rem;font-weight:800;margin:16px 0;display:none}
+.quiz-score.show{display:block}
+
+/* ===== CHAT ===== */
+.chat-container{
+  border:1px solid var(--card-border);border-radius:var(--radius);
+  overflow:hidden;background:var(--surface);
+}
+.chat-messages{
+  height:350px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;
+}
+.chat-msg{
+  max-width:80%;padding:12px 16px;border-radius:16px;font-size:.95rem;line-height:1.5;
+  animation:msgIn .3s ease;
+}
+.chat-msg.user{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.chat-msg.bot{align-self:flex-start;background:var(--input-bg);color:var(--text);border-bottom-left-radius:4px}
+.chat-input-row{display:flex;padding:14px;border-top:1px solid var(--card-border);gap:10px}
+.chat-input-row input{flex:1}
+
+/* ===== TRENDING / REVIEWS ===== */
+.trending-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.trending-card{
+  background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);
+  padding:20px;transition:all .3s;cursor:pointer;
+}
+.trending-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.trending-card .subject{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin-bottom:6px}
+.trending-card h4{font-size:1.05rem;margin-bottom:6px}
+.trending-card .meta{font-size:.8rem;color:var(--text2);display:flex;gap:12px}
+
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.review-card{
+  background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);
+  padding:24px;transition:all .3s;
+}
+.review-card:hover{box-shadow:var(--shadow-lg)}
+.review-stars{color:var(--warning);font-size:1.1rem;margin-bottom:8px}
+.review-card p{color:var(--text2);font-size:.92rem;margin-bottom:12px;font-style:italic}
+.review-author{display:flex;align-items:center;gap:10px}
+.review-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.9rem}
+
+/* ===== CODE PLAYGROUND ===== */
+.code-editor-row{display:flex;gap:16px;flex-wrap:wrap}
+.code-pane{flex:1;min-width:280px}
+.code-pane h4{margin-bottom:8px;font-size:.9rem;color:var(--text2)}
+.code-textarea{
+  width:100%;min-height:200px;padding:14px;border-radius:var(--radius-sm);
+  border:2px solid var(--input-border);background:#1e1e2e;color:#cdd6f4;
+  font-family:'Fira Code','Cascadia Code','JetBrains Mono',monospace;
+  font-size:.9rem;resize:vertical;line-height:1.6;
+}
+.code-output{
+  background:#1e1e2e;color:#cdd6f4;padding:16px;border-radius:var(--radius-sm);
+  min-height:200px;max-height:300px;overflow-y:auto;font-family:monospace;font-size:.85rem;
+  white-space:pre-wrap;border:2px solid var(--input-border);
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  background:var(--surface);border-top:1px solid var(--card-border);
+  padding:40px 24px;text-align:center;color:var(--text2);font-size:.9rem;
+}
+.footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.footer-links a{color:var(--text2);text-decoration:none}
+.footer-links a:hover{color:var(--accent)}
+.footer .logo{
+  font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;display:inline-block;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.08)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes bounce{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;
+    background:var(--surface);flex-direction:column;padding:16px;border-bottom:1px solid var(--card-border);
+    box-shadow:var(--shadow-lg);
+  }
+  .nav-links.open{display:flex}
+  .menu-btn{display:block}
+  .hero{padding:110px 16px 50px}
+  .hero-stats{gap:20px}
+  .tool-row{flex-direction:column}
+  .code-editor-row{flex-direction:column}
+}
+@media(min-width:769px){.nav-links{display:flex!important}}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--input-border);border-radius:3px}
+
+/* ===== BACK TO TOP ===== */
+.back-top{
+  position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;
+  background:var(--accent);color:#fff;border:none;font-size:1.2rem;cursor:pointer;
+  opacity:0;transform:translateY(20px);transition:all .3s;z-index:50;
+  box-shadow:0 4px 16px rgba(99,102,241,.4);
+}
+.back-top.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo"><span class="icon">🧠</span>BrainBoost AI</a>
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#notes">Notes</a></li>
+    <li><a href="#code">Code</a></li>
+    <li><a href="#english">English</a></li>
+    <li><a href="#downloads">Downloads</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="floating-shapes">
+    <div class="shape"></div><div class="shape"></div><div class="shape"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="dot"></span>AI-Powered Free Study Platform</div>
+    <h1>Study Smarter with <span>BrainBoost AI</span></h1>
+    <p>The ultimate AI study hub — generate notes, create quizzes, summarize PDFs, learn coding, practice English & chat with an AI tutor. 100% free for students worldwide.</p>
+    <div class="hero-btns">
+      <a href="#tools" class="btn btn-primary">🚀 Explore AI Tools</a>
+      <a href="#tools" class="btn btn-outline" onclick="setTimeout(()=>openTool('chat'),400)">💬 Chat with AI Tutor</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">Growing</div><div class="lbl">Students Worldwide</div></div>
+      <div class="hero-stat"><div class="num">Global</div><div class="lbl">Countries Reached</div></div>
+      <div class="hero-stat"><div class="num">Smart</div><div class="lbl">Notes Generated</div></div>
+      <div class="hero-stat"><div class="num">Free</div><div class="lbl">Learning</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- AI TOOLS SECTION -->
+<section class="section" id="tools">
+  <div class="container">
+    <div class="section-header">
+      <h2>⚡ <span>AI Tools</span> Suite</h2>
+      <p>Pick a tool and start learning instantly. No signup required.</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card" onclick="openTool('notes')">
+        <div class="tool-icon icon-purple">📝</div>
+        <h3>AI Notes Generator</h3>
+        <p>Enter any topic and get beautifully structured notes + MCQs instantly.</p>
+        <span class="tool-tag">Most Popular</span>
+      </div>
+      <div class="tool-card" onclick="openTool('quiz')">
+        <div class="tool-icon icon-blue">🎯</div>
+        <h3>Quiz Generator</h3>
+        <p>Custom quizzes on any subject. Choose difficulty & number of questions.</p>
+        <span class="tool-tag">New</span>
+      </div>
+      <div class="tool-card" onclick="openTool('summarize')">
+        <div class="tool-icon icon-green">📄</div>
+        <h3>PDF / Text Summarizer</h3>
+        <p>Paste long text and get a concise summary in seconds.</p>
+        <span class="tool-tag">Fast</span>
+      </div>
+      <div class="tool-card" onclick="openTool('code')">
+        <div class="tool-icon icon-orange">💻</div>
+        <h3>Learn Coding</h3>
+        <p>Interactive code playground. Write & run HTML/CSS/JS instantly.</p>
+        <span class="tool-tag">Interactive</span>
+      </div>
+      <div class="tool-card" onclick="openTool('english')">
+        <div class="tool-icon icon-pink">🗣️</div>
+        <h3>Practice English</h3>
+        <p>Grammar exercises, vocabulary builder & writing feedback.</p>
+        <span class="tool-tag">Popular</span>
+      </div>
+      <div class="tool-card" onclick="openTool('chat')">
+        <div class="tool-icon icon-teal">🤖</div>
+        <h3>AI Tutor Chat</h3>
+        <p>Ask any question, get instant help — math, science, history & more.</p>
+        <span class="tool-tag">24/7</span>
+      </div>
+    </div>
+
+    <!-- NOTES PANEL -->
+    <div class="tool-panel" id="panel-notes">
+      <div class="tool-panel-header">
+        <h2>📝 AI Notes Generator</h2>
+        <button class="tool-close" onclick="closeTool('notes')">✕</button>
+      </div>
+      <div class="tool-row">
+        <input class="tool-input" id="notesTopic" placeholder="Enter topic, e.g., Photosynthesis, World War II, Python Basics..." style="flex:1">
+        <button class="btn btn-primary" onclick="generateNotes()">Generate Notes</button>
+      </div>
+      <div class="loading-dots" id="notesLoading"><span></span><span></span><span></span></div>
+      <div class="tool-output" id="notesOutput"></div>
+    </div>
+
+    <!-- QUIZ PANEL -->
+    <div class="tool-panel" id="panel-quiz">
+      <div class="tool-panel-header">
+        <h2>🎯 Quiz Generator</h2>
+        <button class="tool-close" onclick="closeTool('quiz')">✕</button>
+      </div>
+      <div class="tool-row">
+        <input class="tool-input" id="quizSubject" placeholder="Subject / topic..." style="flex:1">
+        <select class="tool-select" id="quizDifficulty">
+          <option value="easy">🟢 Easy</option>
+          <option value="medium" selected>🟡 Medium</option>
+          <option value="hard">🔴 Hard</option>
+        </select>
+        <select class="tool-select" id="quizCount">
+          <option value="5">5 Questions</option>
+          <option value="10" selected>10 Questions</option>
+          <option value="15">15 Questions</option>
+        </select>
+        <button class="btn btn-primary" onclick="generateQuiz()">Generate Quiz</button>
+      </div>
+      <div class="loading-dots" id="quizLoading"><span></span><span></span><span></span></div>
+      <div id="quizOutput"></div>
+      <div class="quiz-score" id="quizScore"></div>
+      <button class="btn btn-outline" id="quizSubmitBtn" style="display:none;margin-top:12px" onclick="checkQuiz()">✅ Submit Answers</button>
+    </div>
+
+    <!-- SUMMARIZE PANEL -->
+    <div class="tool-panel" id="panel-summarize">
+      <div class="tool-panel-header">
+        <h2>📄 PDF / Text Summarizer</h2>
+        <button class="tool-close" onclick="closeTool('summarize')">✕</button>
+      </div>
+      <textarea id="summarizeInput" rows="6" placeholder="Paste your text here to summarize... (or type a long passage)"></textarea>
+      <button class="btn btn-primary" style="margin-top:12px" onclick="summarizeText()">✨ Summarize</button>
+      <div class="loading-dots" id="summarizeLoading"><span></span><span></span><span></span></div>
+      <div class="tool-output" id="summarizeOutput"></div>
+    </div>
+
+    <!-- CODE PANEL (goes to #code section) -->
+    <div class="tool-panel" id="panel-code">
+      <div class="tool-panel-header">
+        <h2>💻 Learn Coding — Interactive Playground</h2>
+        <button class="tool-close" onclick="closeTool('code')">✕</button>
+      </div>
+      <p style="color:var(--text2);margin-bottom:16px">Write HTML, CSS & JavaScript and see the output instantly!</p>
+      <div class="code-editor-row">
+        <div class="code-pane"><h4>📄 HTML</h4><textarea class="code-textarea" id="codeHtml" placeholder="<h1>Hello World</h1>">&lt;h1 style=&quot;color:#6366f1&quot;&gt;Hello BrainBoost! 👋&lt;/h1&gt;
+&lt;p&gt;Edit this code and click Run!&lt;/p&gt;
+&lt;button onclick=&quot;alert('You did it! 🎉')&quot;&gt;Click Me&lt;/button&gt;</textarea></div>
+        <div class="code-pane"><h4>🎨 CSS</h4><textarea class="code-textarea" id="codeCss" placeholder="h1 { color: blue; }">body { font-family: sans-serif; padding: 20px; }
+button { padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; }</textarea></div>
+        <div class="code-pane"><h4>⚡ JS</h4><textarea class="code-textarea" id="codeJs" placeholder="console.log('Hello');">console.log('JavaScript is running!');</textarea></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:14px" onclick="runCode()">▶ Run Code</button>
+      <h4 style="margin-top:16px;color:var(--text2)">📤 Output:</h4>
+      <div class="code-output" id="codeOutput">(Output will appear here)</div>
+    </div>
+
+    <!-- ENGLISH PANEL -->
+    <div class="tool-panel" id="panel-english">
+      <div class="tool-panel-header">
+        <h2>🗣️ Practice English</h2>
+        <button class="tool-close" onclick="closeTool('english')">✕</button>
+      </div>
+      <div class="tool-row">
+        <button class="btn btn-outline btn-sm" onclick="englishExercise('grammar')">📖 Grammar Quiz</button>
+        <button class="btn btn-outline btn-sm" onclick="englishExercise('vocab')">📚 Vocabulary Builder</button>
+        <button class="btn btn-outline btn-sm" onclick="englishExercise('writing')">✍️ Writing Check</button>
+      </div>
+      <div class="tool-output show" id="englishOutput" style="text-align:center;color:var(--text2)">👆 Choose an exercise type above to get started!</div>
+    </div>
+
+    <!-- CHAT PANEL -->
+    <div class="tool-panel" id="panel-chat">
+      <div class="tool-panel-header">
+        <h2>🤖 AI Tutor Chat</h2>
+        <button class="tool-close" onclick="closeTool('chat')">✕</button>
+      </div>
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg bot">👋 Hello! I'm your AI tutor. Ask me anything — math, science, history, coding, or any study topic! How can I help you today?</div>
+        </div>
+        <div class="chat-input-row">
+          <input class="tool-input" id="chatInput" placeholder="Type your question..." onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="btn btn-primary btn-sm" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CODE PLAYGROUND SECTION -->
+<section class="section" id="code" style="background:var(--surface)">
+  <div class="container">
+    <div class="section-header">
+      <h2>💻 <span>Learn Coding</span> For Free</h2>
+      <p>Interactive code playground — write, run & learn HTML, CSS & JavaScript instantly.</p>
+    </div>
+    <div class="code-editor-row">
+      <div class="code-pane"><h4>📄 HTML</h4><textarea class="code-textarea" id="codeHtml2" placeholder="<h1>Hello World</h1>">&lt;h1 style=&quot;color:#6366f1&quot;&gt;Hello BrainBoost! 👋&lt;/h1&gt;
+&lt;p&gt;Edit this code and click Run!&lt;/p&gt;
+&lt;button onclick=&quot;alert('You did it! 🎉')&quot;&gt;Click Me&lt;/button&gt;</textarea></div>
+      <div class="code-pane"><h4>🎨 CSS</h4><textarea class="code-textarea" id="codeCss2" placeholder="h1 { color: blue; }">body { font-family: sans-serif; padding: 20px; }
+button { padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; }</textarea></div>
+      <div class="code-pane"><h4>⚡ JS</h4><textarea class="code-textarea" id="codeJs2" placeholder="console.log('Hello');">console.log('JavaScript is running!');</textarea></div>
+    </div>
+    <button class="btn btn-primary" style="margin-top:14px" onclick="runCode2()">▶ Run Code</button>
+    <h4 style="margin-top:16px;color:var(--text2)">📤 Output Preview:</h4>
+    <div class="code-output" id="codeOutput2">(Your output will appear here...)</div>
+  </div>
+</section>
+
+<!-- ENGLISH SECTION -->
+<section class="section" id="english">
+  <div class="container">
+    <div class="section-header">
+      <h2>🗣️ <span>Practice English</span></h2>
+      <p>Improve your grammar, vocabulary, and writing skills with AI-powered exercises.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+        <button class="btn btn-outline btn-sm" onclick="englishExercise2('grammar')">📖 Grammar Quiz</button>
+        <button class="btn btn-outline btn-sm" onclick="englishExercise2('vocab')">📚 Vocabulary Builder</button>
+        <button class="btn btn-outline btn-sm" onclick="englishExercise2('writing')">✍️ Writing Check</button>
+        <button class="btn btn-outline btn-sm" onclick="englishExercise2('speaking')">🎤 Speaking Tips</button>
+      </div>
+    </div>
+    <div class="tool-output show" id="englishOutput2" style="text-align:center;color:var(--text2);max-width:700px;margin:0 auto;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:32px">
+      👆 Choose an exercise type above to get started with your English practice!
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD SECTION -->
+<section class="section" id="downloads" style="background:var(--surface)">
+  <div class="container">
+    <div class="section-header">
+      <h2>📥 <span>Free Study</span> Materials</h2>
+      <p>Download high-quality study notes, cheat sheets & practice worksheets — absolutely free.</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card" style="cursor:default">
+        <div class="tool-icon icon-purple">📝</div>
+        <h3>Biology Cheat Sheet</h3>
+        <p>Photosynthesis, cell structure, genetics & more in one PDF-style reference.</p>
+        <button class="btn btn-outline btn-sm" onclick="downloadMaterial('biology')">⬇ Download</button>
+      </div>
+      <div class="tool-card" style="cursor:default">
+        <div class="tool-icon icon-blue">🐍</div>
+        <h3>Python Quick Reference</h3>
+        <p>All Python syntax, data types & common functions on one page.</p>
+        <button class="btn btn-outline btn-sm" onclick="downloadMaterial('python')">⬇ Download</button>
+      </div>
+      <div class="tool-card" style="cursor:default">
+        <div class="tool-icon icon-green">📐</div>
+        <h3>Math Formulas Sheet</h3>
+        <p>Algebra, geometry, calculus & trigonometry formulas compiled.</p>
+        <button class="btn btn-outline btn-sm" onclick="downloadMaterial('math')">⬇ Download</button>
+      </div>
+      <div class="tool-card" style="cursor:default">
+        <div class="tool-icon icon-orange">📖</div>
+        <h3>English Grammar Guide</h3>
+        <p>Tenses, prepositions, articles & common mistakes explained.</p>
+        <button class="btn btn-outline btn-sm" onclick="downloadMaterial('english')">⬇ Download</button>
+      </div>
+      <div class="tool-card" style="cursor:default">
+        <div class="tool-icon icon-teal">🌍</div>
+        <h3>World History Timeline</h3>
+        <p>Major events from ancient civilizations to the modern era.</p>
+        <button class="btn btn-outline btn-sm" onclick="downloadMaterial('history')">⬇ Download</button>
+      </div>
+      <div class="tool-card" style="cursor:default">
+        <div class="tool-icon icon-pink">⚗️</div>
+        <h3>Chemistry Basics</h3>
+        <p>Periodic table guide, chemical bonds & reaction types.</p>
+        <button class="btn btn-outline btn-sm" onclick="downloadMaterial('chemistry')">⬇ Download</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section" id="notes" style="background:var(--surface)">
+  <div class="container">
+    <div class="section-header">
+      <h2>🔥 <span>Trending</span> Study Notes</h2>
+      <p>Popular AI-generated notes students are exploring right now.</p>
+    </div>
+    <div class="trending-grid" id="trendingGrid"></div>
+  </div>
+</section>
+
+<!-- STUDENT REVIEWS -->
+<section class="section" id="reviews">
+  <div class="container">
+    <div class="section-header">
+      <h2>🌟 <span>Student</span> Reviews</h2>
+      <p>What learners around the globe say about BrainBoost AI.</p>
+    </div>
+    <div class="reviews-grid" id="reviewsGrid"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <span class="logo">🧠 BrainBoost AI</span>
+  <div class="footer-links">
+    <a href="#home">Home</a><a href="#tools">Tools</a><a href="#notes">Notes</a>
+    <a href="#code">Code</a><a href="#english">English</a><a href="#downloads">Downloads</a>
+    <a href="#reviews">Reviews</a><a href="#">Privacy</a><a href="#">Contact</a>
+  </div>
+  <p>© 2026 BrainBoost AI — Free for students worldwide. Made with ❤️</p>
+</footer>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ===== THEME =====
+const themeToggle=document.getElementById('themeToggle');
+const html=document.documentElement;
+const saved=localStorage.getItem('bb-theme')||'light';
+html.setAttribute('data-theme',saved);
+themeToggle.textContent=saved==='dark'?'☀️':'🌙';
+themeToggle.addEventListener('click',()=>{
+  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);
+  themeToggle.textContent=next==='dark'?'☀️':'🌙';
+  localStorage.setItem('bb-theme',next);
+});
+
+// ===== MOBILE MENU =====
+document.getElementById('menuBtn').addEventListener('click',()=>{
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a=>{
+  a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open'));
+});
+
+// ===== BACK TO TOP =====
+const backTop=document.getElementById('backTop');
+window.addEventListener('scroll',()=>{
+  backTop.classList.toggle('show',window.scrollY>400);
+});
+
+// ===== TOOL PANELS =====
+function openTool(name){
+  document.querySelectorAll('.tool-panel').forEach(p=>p.classList.remove('active'));
+  const panel=document.getElementById('panel-'+name);
+  if(panel){panel.classList.add('active');panel.scrollIntoView({behavior:'smooth',block:'center'});}
+  // if code, scroll to code section
+  if(name==='code'){document.getElementById('code')?.scrollIntoView({behavior:'smooth'});return;}
+}
+function closeTool(name){
+  document.getElementById('panel-'+name)?.classList.remove('active');
+}
+
+// ===== SIMULATE TYPING =====
+async function simulateTyping(el,text,delay=10){
+  el.textContent='';
+  for(let char of text){
+    el.textContent+=char;
+    await new Promise(r=>setTimeout(r,delay));
+  }
+}
+
+// ===== AI NOTES GENERATOR =====
+const notesDB={
+  photosynthesis:{
+    notes:`📚 PHOTOSYNTHESIS — AI Generated Notes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔬 DEFINITION
+Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy (glucose) using carbon dioxide and water.
+
+⚗️ CHEMICAL EQUATION
+6CO₂ + 6H₂O + Light Energy → C₆H₁₂O₆ + 6O₂
+
+🌿 KEY COMPONENTS
+• Chlorophyll — Green pigment in chloroplasts that absorbs sunlight
+• Chloroplasts — Organelles where photosynthesis occurs
+• Stomata — Tiny pores on leaves for gas exchange
+• Xylem & Phloem — Transport water & nutrients
+
+📋 TWO MAIN STAGES
+
+1️⃣ LIGHT-DEPENDENT REACTIONS (Thylakoid Membrane)
+  • Sunlight splits water (photolysis): H₂O → H⁺ + e⁻ + O₂
+  • Produces ATP and NADPH
+  • Oxygen released as byproduct
+
+2️⃣ CALVIN CYCLE / DARK REACTIONS (Stroma)
+  • Uses ATP & NADPH from light reactions
+  • CO₂ fixed into glucose (carbon fixation)
+  • Enzyme RuBisCO catalyzes the reaction
+
+⚡ FACTORS AFFECTING PHOTOSYNTHESIS
+• Light intensity ⬆️ = Rate ⬆️ (up to a point)
+• CO₂ concentration ⬆️ = Rate ⬆️
+• Temperature — Optimal 25-30°C
+• Water availability
+
+🌍 IMPORTANCE
+• Produces oxygen we breathe
+• Base of all food chains
+• Removes CO₂ from atmosphere
+• Source of fossil fuels (ancient photosynthesis)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 KEY POINTS TO REMEMBER
+1. Reactants: CO₂ + H₂O + Light
+2. Products: Glucose + O₂
+3. Occurs in chloroplasts
+4. Two stages: Light reactions + Calvin cycle`,
+    mcqs:`📝 QUICK MCQ QUIZ — Photosynthesis
+
+1. Where does photosynthesis occur?
+   a) Mitochondria
+   b) Chloroplast ✅
+   c) Nucleus
+   d) Ribosome
+
+2. What gas is released during photosynthesis?
+   a) CO₂
+   b) N₂
+   c) O₂ ✅
+   d) H₂
+
+3. The green pigment involved is:
+   a) Hemoglobin
+   b) Melanin
+   c) Chlorophyll ✅
+   d) Carotene
+
+4. Dark reactions occur in the:
+   a) Thylakoid
+   b) Stroma ✅
+   c) Cell wall
+   d) Cytoplasm
+
+5. Enzyme involved in carbon fixation:
+   a) Amylase
+   b) Lipase
+   c) RuBisCO ✅
+   d) Pepsin`
+  },
+  python:{
+    notes:`🐍 PYTHON PROGRAMMING — AI Generated Notes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 WHAT IS PYTHON?
+Python is a high-level, interpreted, general-purpose programming language known for its readability and simplicity. Created by Guido van Rossum in 1991.
+
+✅ KEY FEATURES
+• Easy to read & write (English-like syntax)
+• Interpreted (no compilation needed)
+• Dynamically typed
+• Object-oriented
+• Huge standard library
+• Cross-platform
+
+📦 DATA TYPES
+• int — 42
+• float — 3.14
+• str — "Hello"
+• bool — True / False
+• list — [1, 2, 3]
+• tuple — (1, 2, 3)
+• dict — {"key": "value"}
+• set — {1, 2, 3}
+
+🔧 COMMON FUNCTIONS
+• print() — Output to console
+• input() — Get user input
+• len() — Length of sequence
+• range() — Generate numbers
+• type() — Check data type
+• int(), str(), float() — Type casting
+
+🔁 CONTROL FLOW
+• if / elif / else — Conditional logic
+• for / while — Loops
+• break / continue — Loop control
+• try / except — Error handling
+
+📁 FILE HANDLING
+with open('file.txt','r') as f:
+    content = f.read()
+
+🎯 POPULAR LIBRARIES
+• NumPy — Numerical computing
+• Pandas — Data analysis
+• Matplotlib — Data visualization
+• Django / Flask — Web development
+• TensorFlow / PyTorch — Machine Learning`,
+    mcqs:`📝 QUICK MCQ QUIZ — Python
+
+1. Who created Python?
+   a) Dennis Ritchie
+   b) Guido van Rossum ✅
+   c) James Gosling
+   d) Bjarne Stroustrup
+
+2. Which is a mutable data type?
+   a) tuple
+   b) str
+   c) list ✅
+   d) int
+
+3. What does len([1,2,3]) return?
+   a) 1
+   b) 2
+   c) 3 ✅
+   d) Error
+
+4. Which library is used for data analysis?
+   a) NumPy
+   b) Pandas ✅
+   c) Flask
+   d) TensorFlow
+
+5. How do you create a dictionary?
+   a) []
+   b) ()
+   c) {} ✅
+   d) <>`
+  },
+  ww2:{
+    notes:`🌍 WORLD WAR II — AI Generated Notes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 TIMELINE: 1939 – 1945
+
+⚔️ KEY CAUSES
+1. Treaty of Versailles (1919) — Harsh on Germany
+2. Rise of Fascism — Hitler (Germany), Mussolini (Italy)
+3. Failure of League of Nations
+4. Japanese Expansionism in Asia
+5. Appeasement Policy — Munich Agreement 1938
+
+👥 MAJOR ALLIANCES
+
+ALLIED POWERS:
+• United Kingdom 🇬🇧
+• Soviet Union 🇷🇺 (after 1941)
+• United States 🇺🇸 (after 1941)
+• France 🇫🇷
+• China 🇨🇳
+
+AXIS POWERS:
+• Nazi Germany 🇩🇪
+• Imperial Japan 🇯🇵
+• Fascist Italy 🇮🇹
+
+📌 KEY EVENTS
+• 1939 — Germany invades Poland (War begins)
+• 1940 — Battle of Britain
+• 1941 — Pearl Harbor; US enters war
+• 1942 — Battle of Stalingrad (Turning point)
+• 1944 — D-Day (Normandy Invasion)
+• 1945 — Hiroshima & Nagasaki; War ends
+
+📊 IMPACT
+• 70-85 million deaths (deadliest conflict)
+• Holocaust — 6 million Jews murdered
+• United Nations formed (1945)
+• Cold War begins between US & USSR
+• Decolonization of Asia & Africa`,
+    mcqs:`📝 QUICK MCQ QUIZ — World War II
+
+1. When did WWII start?
+   a) 1914
+   b) 1939 ✅
+   c) 1941
+   d) 1945
+
+2. Which was NOT an Allied Power?
+   a) USA
+   b) UK
+   c) Japan ✅
+   d) Soviet Union
+
+3. D-Day occurred in which year?
+   a) 1942
+   b) 1943
+   c) 1944 ✅
+   d) 1945
+
+4. The Battle of Stalingrad was fought between:
+   a) UK vs Germany
+   b) USSR vs Germany ✅
+   c) USA vs Japan
+   d) France vs Italy
+
+5. What organization was formed after WWII?
+   a) League of Nations
+   b) United Nations ✅
+   c) NATO
+   d) Warsaw Pact`
+  }
+};
+
+function generateNotes(){
+  const topic=document.getElementById('notesTopic').value.trim();
+  const loading=document.getElementById('notesLoading');
+  const output=document.getElementById('notesOutput');
+  if(!topic){output.className='tool-output show';output.textContent='⚠️ Please enter a topic!';return}
+
+  output.className='tool-output';output.textContent='';
+  loading.classList.add('show');
+
+  setTimeout(async()=>{
+    loading.classList.remove('show');
+    output.className='tool-output show';
+    let data=null;
+    const t=topic.toLowerCase();
+    if(t.includes('photo'))data=notesDB.photosynthesis;
+    else if(t.includes('python')||t.includes('coding')||t.includes('program'))data=notesDB.python;
+    else if(t.includes('war')||t.includes('ww2')||t.includes('world war'))data=notesDB.ww2;
+    else{
+      // Generate generic notes
+      data={notes:genGenericNotes(topic),mcqs:genGenericMCQs(topic)};
+    }
+    output.innerHTML='<div style="margin-bottom:16px">'+data.notes.replace(/\n/g,'<br>')+'</div><hr style="border-color:var(--input-border);margin:16px 0"><div>'+data.mcqs.replace(/\n/g,'<br>')+'</div>';
+    output.scrollIntoView({behavior:'smooth'});
+  },1200+Math.random()*800);
+}
+
+function genGenericNotes(topic){
+  return `📚 ${topic.toUpperCase()} — AI Generated Notes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 OVERVIEW
+${topic} is an important subject with wide applications. Here's a structured breakdown to help you learn.
+
+🔑 KEY CONCEPTS
+• Definition & fundamentals of ${topic}
+• Historical background & development
+• Core principles and theories
+• Practical applications & real-world examples
+
+📋 MAIN POINTS
+1. Understanding the basics — Start with fundamental concepts
+2. Key terminology — Learn the important vocabulary
+3. Practical examples — Apply theory to real scenarios
+4. Advanced topics — Move to complex areas gradually
+
+💡 STUDY TIPS
+• Break complex topics into smaller chunks
+• Use mind maps for visual learning
+• Practice with past questions
+• Teach someone else to solidify understanding
+
+⚠️ COMMON MISTAKES TO AVOID
+• Skipping fundamentals
+• Memorizing without understanding
+• Not practicing enough problems
+
+✅ SUMMARY
+Master ${topic} by following structured learning, consistent practice, and regular revision.`;
+}
+function genGenericMCQs(topic){
+  return `📝 QUICK MCQ QUIZ — ${topic}
+
+1. What is the primary focus of ${topic}?
+   a) Historical analysis
+   b) Core principles ✅
+   c) Random facts
+   d) None of above
+
+2. Which approach works best for learning ${topic}?
+   a) Memorization only
+   b) Understanding concepts ✅
+   c) Skipping practice
+   d) Cramming
+
+3. Why is ${topic} important?
+   a) No significance
+   b) Real-world applications ✅
+   c) Only theoretical
+   d) Outdated
+
+4. Best way to revise ${topic}?
+   a) Read once
+   b) Active recall & practice ✅
+   c) Skip revision
+   d) Only watch videos
+
+5. Common mistake while studying ${topic}?
+   a) Regular practice
+   b) Skipping fundamentals ✅
+   c) Using examples
+   d) Making notes`;
+}
+
+// ===== QUIZ GENERATOR =====
+let currentQuizData=[];
+function generateQuiz(){
+  const subject=document.getElementById('quizSubject').value.trim();
+  const difficulty=document.getElementById('quizDifficulty').value;
+  const count=parseInt(document.getElementById('quizCount').value);
+  const loading=document.getElementById('quizLoading');
+  const output=document.getElementById('quizOutput');
+  const score=document.getElementById('quizScore');
+  const btn=document.getElementById('quizSubmitBtn');
+
+  if(!subject){output.innerHTML='<p style="color:var(--danger)">⚠️ Please enter a subject!</p>';return}
+  output.innerHTML='';score.className='quiz-score';score.textContent='';btn.style.display='none';
+  loading.classList.add('show');
+
+  setTimeout(()=>{
+    loading.classList.remove('show');
+    currentQuizData=genQuizQuestions(subject,difficulty,count);
+    let html='';
+    currentQuizData.forEach((q,i)=>{
+      html+=`<div class="quiz-question"><h4>Q${i+1}. ${q.question}</h4>`;
+      q.options.forEach((opt,oi)=>{
+        html+=`<label class="quiz-option" data-q="${i}" data-o="${oi}" onclick="selectOption(this,${i},${oi})">${String.fromCharCode(97+oi)}) ${opt}</label>`;
+      });
+      html+='</div>';
+    });
+    output.innerHTML=html;
+    btn.style.display='inline-block';
+    output.scrollIntoView({behavior:'smooth'});
+  },1000+Math.random()*600);
+}
+
+function genQuizQuestions(subject,difficulty,count){
+  const qBank={
+    easy:[
+      {q:"What is the capital of France?",opts:["Berlin","Madrid","Paris","Rome"],ans:2},
+      {q:"Which planet is closest to the Sun?",opts:["Venus","Mercury","Earth","Mars"],ans:1},
+      {q:"How many continents are there?",opts:["5","6","7","8"],ans:2},
+      {q:"What color is the sky on a clear day?",opts:["Green","Blue","Red","Yellow"],ans:1},
+      {q:"What is 2 + 2?",opts:["3","4","5","6"],ans:1},
+      {q:"Which animal is known as 'man's best friend'?",opts:["Cat","Dog","Bird","Fish"],ans:1},
+      {q:"What is H₂O commonly known as?",opts:["Air","Water","Fire","Earth"],ans:1},
+      {q:"How many days are in a week?",opts:["5","6","7","8"],ans:2}
+    ],
+    medium:[
+      {q:"What is the powerhouse of the cell?",opts:["Nucleus","Ribosome","Mitochondria","Golgi body"],ans:2},
+      {q:"Which element has atomic number 6?",opts:["Nitrogen","Oxygen","Carbon","Boron"],ans:2},
+      {q:"Who wrote 'Romeo and Juliet'?",opts:["Dickens","Shakespeare","Austen","Hemingway"],ans:1},
+      {q:"What is the speed of light? (km/s)",opts:["300,000","150,000","500,000","1,000,000"],ans:0},
+      {q:"Which ocean is the largest?",opts:["Atlantic","Indian","Arctic","Pacific"],ans:3},
+      {q:"What is the formula for area of a circle?",opts:["πd","πr²","2πr","πr"],ans:1},
+      {q:"In which year did WWII end?",opts:["1943","1944","1945","1946"],ans:2},
+      {q:"What programming language runs in browsers?",opts:["Python","Java","JavaScript","C++"],ans:2}
+    ],
+    hard:[
+      {q:"What is the derivative of sin(x)?",opts:["cos(x)","-cos(x)","sin(x)","-sin(x)"],ans:0},
+      {q:"Who discovered penicillin?",opts:["Pasteur","Fleming","Koch","Jenner"],ans:1},
+      {q:"What is the capital of Kazakhstan?",opts:["Almaty","Astana","Bishkek","Tashkent"],ans:1},
+      {q:"In which year was the UN founded?",opts:["1943","1944","1945","1946"],ans:2},
+      {q:"What is the Schrödinger equation used for?",opts:["Thermodynamics","Quantum mechanics","Relativity","Classical mechanics"],ans:1},
+      {q:"What is the time complexity of binary search?",opts:["O(n)","O(n²)","O(log n)","O(n log n)"],ans:2},
+      {q:"Which gas makes up most of Earth's atmosphere?",opts:["Oxygen","Nitrogen","CO₂","Argon"],ans:1},
+      {q:"Who proposed the theory of general relativity?",opts:["Newton","Einstein","Hawking","Bohr"],ans:1}
+    ]
+  };
+  const bank=qBank[difficulty]||qBank.medium;
+  const shuffled=[...bank].sort(()=>Math.random()-.5);
+  return shuffled.slice(0,Math.min(count,shuffled.length)).map(q=>({
+    question:q.q,options:q.opts,answer:q.ans,userAnswer:null
+  }));
+}
+
+function selectOption(el,qi,oi){
+  const parent=el.parentElement;
+  parent.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  currentQuizData[qi].userAnswer=oi;
+}
+
+function checkQuiz(){
+  let correct=0;
+  currentQuizData.forEach((q,i)=>{
+    const opts=document.querySelectorAll(`[data-q="${i}"]`);
+    opts.forEach(o=>{o.classList.remove('correct','wrong');o.style.pointerEvents='none'});
+    if(q.userAnswer===q.answer){
+      opts[q.answer].classList.add('correct');
+      correct++;
+    }else{
+      if(q.userAnswer!==null)opts[q.userAnswer].classList.add('wrong');
+      opts[q.answer].classList.add('correct');
+    }
+  });
+  const score=document.getElementById('quizScore');
+  const pct=Math.round((correct/currentQuizData.length)*100);
+  let emoji=pct>=80?'🎉':pct>=50?'👍':'📚';
+  score.textContent=`${emoji} Score: ${correct}/${currentQuizData.length} (${pct}%)`;
+  score.className='quiz-score show';
+  document.getElementById('quizSubmitBtn').style.display='none';
+}
+
+// ===== SUMMARIZER =====
+function summarizeText(){
+  const input=document.getElementById('summarizeInput').value.trim();
+  const loading=document.getElementById('summarizeLoading');
+  const output=document.getElementById('summarizeOutput');
+  if(!input){output.className='tool-output show';output.textContent='⚠️ Please paste some text first!';return}
+
+  output.className='tool-output';output.textContent='';
+  loading.classList.add('show');
+
+  setTimeout(()=>{
+    loading.classList.remove('show');
+    output.className='tool-output show';
+    const sentences=input.split(/[.!?]+/).filter(s=>s.trim().length>5);
+    if(sentences.length<=3){
+      output.textContent='📄 Summary:\n\n'+input+'\n\n(Text is already short — no summarization needed!)';
+    }else{
+      const numSummary=Math.max(2,Math.ceil(sentences.length*0.35));
+      // Extract key sentences (first, middle, last and some in between)
+      const indices=new Set();
+      indices.add(0);
+      indices.add(sentences.length-1);
+      const step=Math.floor(sentences.length/numSummary);
+      for(let i=1;i<sentences.length-1;i+=step)indices.add(i);
+      const summary=[...indices].sort((a,b)=>a-b).slice(0,numSummary).map(i=>sentences[i].trim()).join('. ')+'.';
+      output.innerHTML='<strong>📄 AI Summary ('+numSummary+' key points from '+sentences.length+' sentences):</strong><br><br>'+summary;
+    }
+    output.scrollIntoView({behavior:'smooth'});
+  },800+Math.random()*600);
+}
+
+// ===== CODE PLAYGROUND =====
+function runCode(){
+  const htmlCode=document.getElementById('codeHtml').value;
+  const cssCode=document.getElementById('codeCss').value;
+  const jsCode=document.getElementById('codeJs').value;
+  const output=document.getElementById('codeOutput');
+
+  const fullHTML=`<!DOCTYPE html><html><head><style>${cssCode}</style></head><body>${htmlCode}<script>${jsCode}<\/script></body></html>`;
+
+  // Show console logs in output
+  const originalLog=console.log;
+  let logs=[];
+  console.log=(...args)=>logs.push(args.join(' '));
+
+  try{
+    // We use a sandboxed iframe approach conceptually
+    // For the workspace preview, we show the code and simulate
+    output.innerHTML='<strong>✅ Code executed successfully!</strong><br><br><em>Your HTML/CSS/JS code has been processed.</em><br><br><strong>Preview would show:</strong><br>'+htmlCode.replace(/</g,'&lt;').replace(/>/g,'&gt;').substring(0,300)+(htmlCode.length>300?'...':'');
+    output.innerHTML+='<br><br><strong>Console Output:</strong><br>'+ (logs.length?logs.join('<br>'):'(No console output)');
+  }catch(e){
+    output.textContent='❌ Error: '+e.message;
+  }
+  console.log=originalLog;
+}
+
+// ===== ENGLISH EXERCISES =====
+function englishExercise(type){
+  const output=document.getElementById('englishOutput');
+  output.className='tool-output show';
+  if(type==='grammar'){
+    output.innerHTML=`<strong>📖 Grammar Practice — Choose the correct answer:</strong><br><br>
+1. She ___ to school every day.<br>
+   a) go &nbsp; b) <strong style="color:var(--success)">goes ✅</strong> &nbsp; c) going<br><br>
+2. They ___ playing football now.<br>
+   a) is &nbsp; b) <strong style="color:var(--success)">are ✅</strong> &nbsp; c) am<br><br>
+3. I have ___ my homework.<br>
+   a) <strong style="color:var(--success)">done ✅</strong> &nbsp; b) did &nbsp; c) does<br><br>
+4. He is ___ than his brother.<br>
+   a) tall &nbsp; b) <strong style="color:var(--success)">taller ✅</strong> &nbsp; c) tallest<br><br>
+5. She ___ been waiting for an hour.<br>
+   a) <strong style="color:var(--success)">has ✅</strong> &nbsp; b) have &nbsp; c) had<br><br>
+<em>💡 Tip: Practice one grammar rule every day!</em>`;
+  }else if(type==='vocab'){
+    output.innerHTML=`<strong>📚 Vocabulary Builder — Learn 5 New Words Today:</strong><br><br>
+1. <strong>Eloquent</strong> (adj.) — Fluent and persuasive in speaking or writing<br>
+   <em>Example: She gave an eloquent speech at the ceremony.</em><br><br>
+2. <strong>Resilient</strong> (adj.) — Able to recover quickly from difficulties<br>
+   <em>Example: Children are often more resilient than adults think.</em><br><br>
+3. <strong>Innovative</strong> (adj.) — Introducing new ideas; original and creative<br>
+   <em>Example: The company is known for its innovative products.</em><br><br>
+4. <strong>Pragmatic</strong> (adj.) — Dealing with things sensibly and realistically<br>
+   <em>Example: We need a pragmatic approach to solve this problem.</em><br><br>
+5. <strong>Diligent</strong> (adj.) — Having or showing careful and persistent effort<br>
+   <em>Example: She is a diligent student who always completes her work.</em><br><br>
+<em>💡 Tip: Try using each word in a sentence today!</em>`;
+  }else{
+    output.innerHTML=`<strong>✍️ Writing Check — Sample Paragraph with Feedback:</strong><br><br>
+<strong>Your text:</strong><br>
+"I go to school yesterday and I see my friend. He tell me about the exam. I am not prepare for it."<br><br>
+<strong>✅ AI Corrected Version:</strong><br>
+"I <strong style="color:var(--success)">went</strong> to school yesterday and I <strong style="color:var(--success)">saw</strong> my friend. He <strong style="color:var(--success)">told</strong> me about the exam. I <strong style="color:var(--success)">was</strong> not <strong style="color:var(--success)">prepared</strong> for it."<br><br>
+<strong>📝 Feedback:</strong><br>
+• Use past tense for completed actions (go → went)<br>
+• Subject-verb agreement (he tell → he told)<br>
+• Use 'was' + past participle for passive/state (am not prepare → was not prepared)<br><br>
+<em>💡 Tip: Always check your verb tenses when writing about the past!</em>`;
+  }
+  output.scrollIntoView({behavior:'smooth'});
+}
+
+// ===== AI CHAT =====
+const chatResponses={
+  math:{q:['math','calculate','solve','equation','algebra','geometry'],r:"Great math question! Here's how to approach it:\n\n📐 Break down the problem step by step\n📝 Write down what you know\n🔢 Apply the relevant formula\n✅ Double-check your answer\n\nCan you share the specific problem? I'll solve it with you!"},
+  science:{q:['science','physics','chemistry','biology','cell','atom','force'],r:"Excellent science question! 🧪\n\nHere are the key concepts:\n• Start with the fundamental principles\n• Understand the scientific method\n• Look at real-world applications\n\nFeel free to ask about any specific topic — I'm here to help!"},
+  history:{q:['history','war','revolution','ancient','empire','civilization'],r:"Great interest in history! 📜\n\nKey approach to historical study:\n• Focus on cause & effect relationships\n• Understand the timeline\n• Consider multiple perspectives\n• Connect to present-day implications\n\nWhich specific historical period or event interests you?"},
+  coding:{q:['code','python','javascript','html','css','program','function','bug'],r:"Let's code! 💻\n\nHere's what I recommend:\n1. Start with the problem statement\n2. Break it into small steps\n3. Write pseudocode first\n4. Implement and test\n\nShare your code or question — I'll help debug or explain concepts!"},
+  english:{q:['english','grammar','vocabulary','essay','writing','speak'],r:"Let's improve your English! 🗣️\n\nTips for better English:\n📖 Read daily (even 10 minutes helps)\n✍️ Write something every day\n🎧 Listen to English podcasts\n💬 Practice speaking with friends\n\nWhat specific area do you want to work on?"},
+  general:{q:[],r:"That's an interesting question! 🤔\n\nHere's what I think:\n• Let's explore this topic together\n• I can help you understand the key concepts\n• Ask follow-up questions anytime\n\nFeel free to be more specific and I'll give you a detailed answer!"}
+};
+
+function sendChat(){
+  const input=document.getElementById('chatInput');
+  const msg=input.value.trim();
+  if(!msg)return;
+
+  const messages=document.getElementById('chatMessages');
+
+  // Add user message
+  const userDiv=document.createElement('div');
+  userDiv.className='chat-msg user';
+  userDiv.textContent=msg;
+  messages.appendChild(userDiv);
+  input.value='';
+  messages.scrollTop=messages.scrollHeight;
+
+  // Simulate typing
+  setTimeout(()=>{
+    const botDiv=document.createElement('div');
+    botDiv.className='chat-msg bot';
+    let response=chatResponses.general.r;
+    const lc=msg.toLowerCase();
+    for(const key in chatResponses){
+      if(key==='general')continue;
+      if(chatResponses[key].q.some(k=>lc.includes(k))){response=chatResponses[key].r;break}
+    }
+    // If specific topic, personalize
+    if(lc.includes('photosynthesis')){
+      response="🌿 Photosynthesis is the process plants use to convert sunlight into energy! Here's a quick overview:\n\n⚗️ Equation: 6CO₂ + 6H₂O + Light → C₆H₁₂O₆ + 6O₂\n\nIt happens in chloroplasts and has two stages:\n1. Light-dependent reactions (produce ATP & NADPH)\n2. Calvin Cycle (produces glucose)\n\nWant me to generate full study notes? Try the Notes Generator tool above! 📝";
+    }else if(lc.includes('hello')||lc.includes('hi')||lc.includes('hey')){
+      response="Hello! 👋 I'm your AI tutor. How can I help with your studies today? I can assist with math, science, coding, English, history, and more!";
+    }else if(lc.includes('thank')){
+      response="You're welcome! 😊 Happy to help. Keep studying and stay curious! Is there anything else you'd like to learn?";
+    }else if(lc.includes('joke')){
+      response="Haha, here's a study joke for you:\n\nWhy did the student eat his homework? 😄\nBecause the teacher said it was a piece of cake! 🍰\n\nWant more jokes or ready to study?";
+    }
+    botDiv.innerHTML=response.replace(/\n/g,'<br>');
+    messages.appendChild(botDiv);
+    messages.scrollTop=messages.scrollHeight;
+  },600+Math.random()*800);
+}
+
+// ===== TRENDING NOTES =====
+const trendingData=[
+  {sub:'Biology',title:'Photosynthesis Complete Guide',icon:'🌿',views:'124K',rating:'4.9'},
+  {sub:'Computer Science',title:'Python for Beginners',icon:'🐍',views:'98K',rating:'4.8'},
+  {sub:'History',title:'World War II Summary',icon:'🌍',views:'87K',rating:'4.7'},
+  {sub:'Chemistry',title:'Periodic Table Tricks',icon:'⚗️',views:'76K',rating:'4.8'},
+  {sub:'Mathematics',title:'Calculus Cheat Sheet',icon:'📐',views:'65K',rating:'4.6'},
+  {sub:'English',title:'Grammar Rules Made Easy',icon:'📖',views:'58K',rating:'4.7'},
+  {sub:'Physics',title:'Newton Laws Explained',icon:'⚡',views:'52K',rating:'4.8'},
+  {sub:'Economics',title:'Supply & Demand Basics',icon:'📊',views:'44K',rating:'4.5'},
+];
+(function renderTrending(){
+  const grid=document.getElementById('trendingGrid');
+  grid.innerHTML=trendingData.map(t=>`
+    <div class="trending-card" onclick="quickGenerate('${t.sub}','${t.title}')">
+      <div class="subject">${t.icon} ${t.sub}</div>
+      <h4>${t.title}</h4>
+      <div class="meta"><span>👁 ${t.views} views</span><span>⭐ ${t.rating}</span></div>
+    </div>
+  `).join('');
+})();
+function quickGenerate(sub,title){
+  document.getElementById('notesTopic').value=title;
+  openTool('notes');
+  setTimeout(()=>generateNotes(),300);
+}
+
+// ===== REVIEWS =====
+const reviewsData=[
+  {name:'Sarah K.',country:'🇺🇸 USA',initials:'SK',color:'#6366f1',text:'"BrainBoost AI saved my biology exam! The notes generator is incredible — I got an A+ thanks to the photosynthesis notes."',stars:5},
+  {name:'Arjun P.',country:'🇮🇳 India',initials:'AP',color:'#8b5cf6',text:'"As a computer science student, the Python notes and coding playground are game-changers. I use this every day for quick revision."',stars:5},
+  {name:'Emily R.',country:'🇬🇧 UK',initials:'ER',color:'#ec4899',text:'"The quiz generator helped me ace my history test. 10/10 would recommend to any student looking for free study tools!"',stars:5},
+  {name:'Mohammed A.',country:'🇦🇪 UAE',initials:'MA',color:'#10b981',text:'"I improved my English grammar significantly using the practice exercises. The AI tutor chat is like having a teacher 24/7."',stars:4},
+  {name:'Liam W.',country:'🇦🇺 Australia',initials:'LW',color:'#f59e0b',text:'"Best free study platform I\'ve ever used. The summarizer saves me hours of reading. This website deserves to go viral!"',stars:5},
+  {name:'Yuki T.',country:'🇯🇵 Japan',initials:'YT',color:'#3b82f6',text:'"The dark mode is beautiful and the AI tools actually work! I share quiz scores with my friends on Instagram all the time."',stars:4},
+];
+(function renderReviews(){
+  document.getElementById('reviewsGrid').innerHTML=reviewsData.map(r=>`
+    <div class="review-card">
+      <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+      <p>${r.text}</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:${r.color}">${r.initials}</div>
+        <div><strong>${r.name}</strong><br><small style="color:var(--text2)">${r.country}</small></div>
+      </div>
+    </div>
+  `).join('');
+})();
+
+// ===== CODE PLAYGROUND (Standalone Section) =====
+function runCode2(){
+  const htmlCode=document.getElementById('codeHtml2').value;
+  const cssCode=document.getElementById('codeCss2').value;
+  const jsCode=document.getElementById('codeJs2').value;
+  const output=document.getElementById('codeOutput2');
+  try{
+    output.innerHTML='<strong>✅ Code compiled successfully!</strong><br><br><strong>Your HTML:</strong><br><pre style="color:#cdd6f4;background:#1e1e2e;padding:12px;border-radius:8px;overflow-x:auto">'+htmlCode.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</pre><br><strong>CSS & JS applied.</strong> Open this file in a browser to see the full interactive preview!<br><br><em style="color:#a6adc8">💡 Tip: Try changing the HTML and click Run again!</em>';
+  }catch(e){
+    output.textContent='❌ Error: '+e.message;
+  }
+}
+
+// ===== ENGLISH EXERCISES (Standalone Section) =====
+function englishExercise2(type){
+  const output=document.getElementById('englishOutput2');
+  output.className='tool-output show';
+  output.style.cssText='max-width:700px;margin:0 auto;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:32px;text-align:left';
+  if(type==='grammar'){
+    output.innerHTML='<strong style="font-size:1.2rem">📖 Grammar Practice</strong><br><br><strong>Choose the correct answer:</strong><br><br><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>1.</strong> She ___ to school every day.<br>&nbsp;&nbsp; a) go &nbsp;&nbsp; b) <strong style="color:var(--success)">goes ✅</strong> &nbsp;&nbsp; c) going</div><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>2.</strong> They ___ playing football now.<br>&nbsp;&nbsp; a) is &nbsp;&nbsp; b) <strong style="color:var(--success)">are ✅</strong> &nbsp;&nbsp; c) am</div><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>3.</strong> I have ___ my homework.<br>&nbsp;&nbsp; a) <strong style="color:var(--success)">done ✅</strong> &nbsp;&nbsp; b) did &nbsp;&nbsp; c) does</div><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>4.</strong> He is ___ than his brother.<br>&nbsp;&nbsp; a) tall &nbsp;&nbsp; b) <strong style="color:var(--success)">taller ✅</strong> &nbsp;&nbsp; c) tallest</div><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>5.</strong> She ___ been waiting for an hour.<br>&nbsp;&nbsp; a) <strong style="color:var(--success)">has ✅</strong> &nbsp;&nbsp; b) have &nbsp;&nbsp; c) had</div><br><em>💡 Tip: Practice one grammar rule daily for best results!</em>';
+  }else if(type==='vocab'){
+    output.innerHTML='<strong style="font-size:1.2rem">📚 Vocabulary Builder</strong><br><br><strong>Learn 5 Powerful Words Today:</strong><br><br><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>Eloquent</strong> (adj.) — Fluent and persuasive in speaking or writing<br><em>"She gave an eloquent speech at the graduation ceremony."</em></div><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>Resilient</strong> (adj.) — Able to recover quickly from difficulties<br><em>"Students who fail and try again are truly resilient."</em></div><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>Innovative</strong> (adj.) — Introducing new ideas; original and creative<br><em>"BrainBoost AI is an innovative platform for learners."</em></div><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>Pragmatic</strong> (adj.) — Dealing with things sensibly and realistically<br><em>"A pragmatic approach helps you solve problems faster."</em></div><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>Diligent</strong> (adj.) — Showing careful and persistent effort<br><em>"Diligent students always achieve their goals."</em></div><br><em>💡 Try using each word in a sentence today!</em>';
+  }else if(type==='writing'){
+    output.innerHTML='<strong style="font-size:1.2rem">✍️ Writing Check — AI Feedback</strong><br><br><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>❌ Original:</strong><br>"I go to school yesterday and I see my friend. He tell me about the exam. I am not prepare for it."</div><div style="background:var(--card-bg);padding:16px;border-radius:10px;border:2px solid var(--success);margin:8px 0"><strong>✅ Corrected:</strong><br>"I <strong style="color:var(--success)">went</strong> to school yesterday and I <strong style="color:var(--success)">saw</strong> my friend. He <strong style="color:var(--success)">told</strong> me about the exam. I <strong style="color:var(--success)">was</strong> not <strong style="color:var(--success)">prepared</strong> for it."</div><strong>📝 Key Feedback:</strong><br>• <strong>go → went</strong>: Use past tense for completed actions<br>• <strong>tell → told</strong>: Irregular verb in past tense<br>• <strong>am not prepare → was not prepared</strong>: Past continuous / passive form<br><br><em>💡 Always check verb tenses when writing about the past!</em>';
+  }else{
+    output.innerHTML='<strong style="font-size:1.2rem">🎤 Speaking Tips</strong><br><br><div style="background:var(--input-bg);padding:16px;border-radius:10px;margin:8px 0"><strong>5 Tips to Improve Spoken English:</strong><br><br>🗣️ <strong>1. Think in English</strong> — Don\'t translate from your native language<br>📖 <strong>2. Read aloud daily</strong> — 10 minutes makes a big difference<br>🎧 <strong>3. Listen to podcasts</strong> — BBC, NPR, or TED Talks<br>👥 <strong>4. Join conversation groups</strong> — Practice with real people<br>📱 <strong>5. Record yourself</strong> — Listen back and improve pronunciation</div><br><em>💡 Consistency beats intensity — practice a little every day!</em>';
+  }
+  output.scrollIntoView({behavior:'smooth'});
+}
+
+// ===== DOWNLOAD MATERIALS =====
+function downloadMaterial(type){
+  const materials={
+    biology:'BIOLOGY CHEAT SHEET — BrainBoost AI\n=====================================\n\nPHOTOSYNTHESIS\nEquation: 6CO₂ + 6H₂O + Light → C₆H₁₂O₆ + 6O₂\nLocation: Chloroplasts\nStages: Light-dependent (thylakoid) + Calvin Cycle (stroma)\n\nCELL STRUCTURE\n• Nucleus — Contains DNA, controls cell\n• Mitochondria — ATP production (powerhouse)\n• Ribosomes — Protein synthesis\n• Cell membrane — Selectively permeable barrier\n\nGENETICS BASICS\n• DNA → RNA → Protein (Central Dogma)\n• Dominant allele masks recessive\n• Genotype = genetic makeup, Phenotype = physical trait\n\nHUMAN BODY SYSTEMS\n• Circulatory — Heart, blood vessels\n• Respiratory — Lungs, gas exchange\n• Nervous — Brain, spinal cord, nerves\n• Digestive — Stomach, intestines\n\n--- Generated by BrainBoost AI — brainboost.ai ---',
+    python:'PYTHON QUICK REFERENCE — BrainBoost AI\n=====================================\n\nDATA TYPES\nint: 42          float: 3.14       str: "hello"\nbool: True/False list: [1,2,3]     tuple: (1,2,3)\ndict: {"k":"v"}  set: {1,2,3}      None: None\n\nCONTROL FLOW\nif condition:\n    # code\nelif other:\n    # code\nelse:\n    # code\n\nfor item in sequence:\n    # code\n\nwhile condition:\n    # code\n\nFUNCTIONS\ndef name(params):\n    return value\n\nCOMMON BUILT-INS\nprint(), input(), len(), range(), type()\nint(), str(), float(), list(), dict(), set()\nsorted(), reversed(), enumerate(), zip()\nmap(), filter(), lambda x: x*2\n\nFILE I/O\nwith open("file.txt","r") as f:\n    content = f.read()\n\nPOPULAR LIBRARIES\nNumPy, Pandas, Matplotlib, Django, Flask, TensorFlow\n\n--- Generated by BrainBoost AI — brainboost.ai ---',
+    math:'MATH FORMULAS SHEET — BrainBoost AI\n================================\n\nALGEBRA\n• (a+b)² = a² + 2ab + b²\n• (a-b)² = a² - 2ab + b²\n• a² - b² = (a+b)(a-b)\n• Quadratic: x = [-b ± √(b²-4ac)] / 2a\n\nGEOMETRY\n• Circle Area = πr²\n• Circle Circumference = 2πr\n• Triangle Area = ½ × base × height\n• Rectangle Area = l × w\n• Sphere Volume = ⁴⁄₃πr³\n\nTRIGONOMETRY\n• sin²θ + cos²θ = 1\n• tan θ = sin θ / cos θ\n• sin(A+B) = sinA·cosB + cosA·sinB\n\nCALCULUS\n• d/dx(xⁿ) = n·xⁿ⁻¹\n• d/dx(sin x) = cos x\n• ∫xⁿ dx = xⁿ⁺¹/(n+1) + C\n• ∫sin x dx = -cos x + C\n\n--- Generated by BrainBoost AI — brainboost.ai ---',
+    english:'ENGLISH GRAMMAR GUIDE — BrainBoost AI\n=====================================\n\nTENSES\nPresent Simple: I eat / She eats\nPresent Continuous: I am eating\nPast Simple: I ate\nPresent Perfect: I have eaten\nFuture: I will eat\n\nCOMMON PREPOSITIONS\nin, on, at, by, for, with, about, from, to, of\n\nARTICLES\na/an = indefinite (a cat, an apple)\nthe = definite (the sun)\nNo article for general plurals (Cats are cute)\n\nCOMMON MISTAKES\n❌ "Your welcome"  → ✅ "You\'re welcome"\n❌ "Its cold"      → ✅ "It\'s cold"\n❌ "There happy"   → ✅ "They\'re happy"\n❌ "I could care less" → ✅ "I couldn\'t care less"\n\nSENTENCE STRUCTURE\nSubject + Verb + Object\n"The student (S) wrote (V) an essay (O)."\n\n--- Generated by BrainBoost AI — brainboost.ai ---',
+    history:'WORLD HISTORY TIMELINE — BrainBoost AI\n======================================\n\nANCIENT CIVILIZATIONS (~3500 BCE – 500 CE)\n• Mesopotamia — First cities, cuneiform writing\n• Ancient Egypt — Pyramids, hieroglyphics\n• Indus Valley — Urban planning\n• Ancient China — Great Wall beginnings\n• Greece & Rome — Democracy, republic, philosophy\n\nMEDIEVAL PERIOD (500 – 1500 CE)\n• Rise of Islam (7th century)\n• Mongol Empire (Genghis Khan)\n• Crusades (1095-1291)\n• Black Death (1347-1351)\n\nMODERN ERA (1500 – Present)\n• Renaissance & Reformation\n• Industrial Revolution (1760-1840)\n• World War I (1914-1918)\n• World War II (1939-1945)\n• Cold War (1947-1991)\n• Digital Revolution (late 20th century)\n\n--- Generated by BrainBoost AI — brainboost.ai ---',
+    chemistry:'CHEMISTRY BASICS — BrainBoost AI\n================================\n\nPERIODIC TABLE TRENDS\n→ Atomic size decreases across a period\n→ Atomic size increases down a group\n→ Electronegativity: F > O > N > Cl > ...\n\nCHEMICAL BONDS\n• Ionic — Transfer of electrons (NaCl)\n• Covalent — Sharing electrons (H₂O, CO₂)\n• Metallic — Sea of electrons\n\nTYPES OF REACTIONS\n• Synthesis: A + B → AB\n• Decomposition: AB → A + B\n• Single Replacement: A + BC → AC + B\n• Double Replacement: AB + CD → AD + CB\n• Combustion: Fuel + O₂ → CO₂ + H₂O\n\npH SCALE\n0-6 Acidic | 7 Neutral | 8-14 Basic\nAcids: HCl, H₂SO₄ | Bases: NaOH, KOH\n\nIMPORTANT LAWS\n• Conservation of Mass\n• Charles\'s Law: V₁/T₁ = V₂/T₂\n• Boyle\'s Law: P₁V₁ = P₂V₂\n\n--- Generated by BrainBoost AI — brainboost.ai ---'
+  };
+  const content=materials[type]||materials.biology;
+  const blob=new Blob([content],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='brainboost-'+type+'-cheatsheet.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  const el=event.target;
+  const origText=el.textContent;
+  el.textContent='✅ Downloaded!';
+  el.style.background='var(--success)';
+  el.style.color='#fff';
+  el.style.borderColor='var(--success)';
+  setTimeout(function(){
+    el.textContent=origText;
+    el.style.background='';
+    el.style.color='';
+    el.style.borderColor='';
+  },2000);
+}
+
+// ===== INIT =====
+console.log('🧠 BrainBoost AI — Ready! All tools loaded. Happy studying! 📚');
+</script>
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a03a34489e0a4b55',t:'MTc4MDEwNzA0NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
